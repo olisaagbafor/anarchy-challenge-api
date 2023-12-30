@@ -131,11 +131,7 @@ export const login = asyncHandler(async (req, res, next) => {
 //@route:   GET /api/v1/auth/logout
 //@access:  Public
 export const logout = asyncHandler(async (req, res, next) => {
-  res.cookie("token", "none", {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
-
+  req.session.destroy();
   res.status(200).json({ success: true, data: {} });
 });
 
@@ -144,7 +140,8 @@ export const logout = asyncHandler(async (req, res, next) => {
 //@route:   POST /api/v1/auth/me
 //@access:  Private
 export const getMe = asyncHandler(async (req, res, next) => {
-  const user = await UserModel.findById(req.user.id);
+  console.log(req.user);
+  const user = await UserModel.findById(req.user._id);
 
   res.status(200).json({ success: true, data: user });
 });

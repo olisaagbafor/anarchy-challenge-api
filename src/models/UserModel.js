@@ -35,7 +35,12 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 userSchema.statics.findOneOrCreate = async function (profile) {
-  //
+  if (!profile) return null;
+  let user = await this.model("User").findOne({ email: profile.email });
+  if (!user) {
+    user = await this.model("User").create(profile);
+  }
+  return user;
 };
 
 export default mongoose.model("User", userSchema);
