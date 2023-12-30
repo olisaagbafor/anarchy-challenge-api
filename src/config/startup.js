@@ -10,7 +10,7 @@ export default function (app) {
   app.use(express.json());
   app.use(
     cors({
-      origin: "http://localhost:3000", // Allow requests from your React app's origin
+      origin: ["http://localhost:3000", "https://anarchy-frontend-olisaagbafor.onrender.com"], // Allow requests from your React app's origin
       methods: "GET,POST,PUT,DELETE", // Allow specific HTTP methods
       credentials: true, // Allow cookies for authenticated requests
     })
