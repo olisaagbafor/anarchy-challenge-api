@@ -11,7 +11,7 @@ export const gitHubOAuth = (passport) => {
       {
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: `${process.env.API_DOMAIN}/github/callback`,
+        callbackURL: `${process.env.API_DOMAIN}/auth/github/callback`,
       },
       async function (accessToken, refreshToken, profile, done) {
         const userProfile = {
@@ -38,7 +38,7 @@ export const googleOAuth = (passport) => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${process.env.API_DOMAIN}/google/callback`,
+        callbackURL: `${process.env.API_DOMAIN}/auth/google/callback`,
         // passReqToCallback: true,
         scope: ["profile", "email"],
         // scope: ["profile", "email", "openid", "https://www.googleapis.com/auth/user.birthday.read", "https://www.googleapis.com/auth/user.gender.read"],
