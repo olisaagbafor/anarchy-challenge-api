@@ -7,7 +7,7 @@ import { getUsers, getSingleUser, createUser, updateUser, deleteUser } from "../
 
 import chatsRoutes from "./chatsRoutes.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.get("/", advancedResults(UserModel), getUsers);
 router.post("/", authenticate, createUser);

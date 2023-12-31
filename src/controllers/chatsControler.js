@@ -44,7 +44,7 @@ export const getChat = asyncHandler(async (req, res, next) => {
 //@route:   POST /api/v1/users/:user_id/chats
 //@access:  Private
 export const createChat = asyncHandler(async (req, res, next) => {
-  const user = await UserModel.findById(req.user._id);
+  const user = await UserModel.findById(req.params.user_id);
   if (!user) {
     return next(new ErrorResponse("User not Found", 404));
   }

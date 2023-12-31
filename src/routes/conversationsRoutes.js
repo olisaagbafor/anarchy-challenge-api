@@ -5,7 +5,7 @@ import { authenticate } from "../middlewares/authMiddleware.js";
 
 import { getConversations, getConversation, createConversation, updateConversation, deleteConversation } from "../controllers/conversationsController.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.get("/", advancedResults(ConversationModel, ["user"]), getConversations);
 router.post("/", authenticate, createConversation);

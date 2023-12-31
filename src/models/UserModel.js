@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
   {
@@ -13,12 +15,29 @@ const userSchema = new mongoose.Schema(
       unique: true,
       match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Please add a valid email, got {VALUE}."],
     },
+    password: {
+      type: String,
+      minlength: [6, "Please enter at least 6 characters for the password"],
+      select: false,
+    },
     picture: String,
   },
   {
     timestamps: true,
   }
 );
+
+// Sign JWT and return token
+userSchema.methods.getSignedJWT = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
+
+// Compares entered password with stored password
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 userSchema.statics.findOneOrCreate = async function (profile) {
   if (!profile) return null;

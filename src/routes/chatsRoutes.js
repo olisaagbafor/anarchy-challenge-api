@@ -7,7 +7,7 @@ import { getChats, getChat, createChat, updateChat, deleteChat } from "../contro
 
 import conversationsRoutes from "./conversationsRoutes.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.get("/", advancedResults(ChatModel, ["user"]), getChats);
 router.post("/", authenticate, createChat);
