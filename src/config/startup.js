@@ -19,7 +19,7 @@ export default function (app) {
     session({
       secret: process.env.COOKIE_SECRET,
       name: "anarchy-ai",
-      cookie: { secure: process.env.NODE_ENV == "production" },
+      cookie: { maxAge: 7200000, secure: process.env.NODE_ENV == "production" },
     })
   );
   app.use(passport.initialize());

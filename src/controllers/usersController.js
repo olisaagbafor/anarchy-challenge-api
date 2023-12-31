@@ -69,26 +69,3 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
 
   return res.send({ success: true, data: {} });
 });
-
-//@description: Delete User
-//@return:  user object
-//@route:   PATCH /api/v1/users/:id/seller
-//@access:  Private
-export const becomeSeller = asyncHandler(async (req, res, next) => {
-  const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  if (!user) {
-    return next(new ErrorResponse("User not found", 404));
-  }
-
-  if (!user.business_name || !user.business_location?.address || !user.business_location?.state) {
-    return next(new ErrorResponse("Provide all required details to become a seller", 401));
-  }
-  user.roles.push("seller");
-  user.default_role = "seller";
-  user.roles = [...new Set(user.roles)];
-  await user.save();
-  return res.status(200).send({ success: true, data: user });
-});
