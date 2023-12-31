@@ -7,10 +7,24 @@ import textGenerator, { getRandomNumber } from "../helpers/textGenerator.js";
 
 //@description: Get All Conversation
 //@return: json object of Conversation
+//@route:   GET /api/v1/chats/:chat_id/conversations
 //@route:   GET /api/v1/conversations
 //@access: Private
 export const getConversations = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedResults);
+  if (req.params.chat_id) {
+    const chat = await ChatModel.findById(req.params.chat_id);
+
+    if (!chat) {
+      return next(new ErrorResponse("Chat not found", 404));
+    }
+
+    const conversations = await ConversationModel.find({ _id: { $in: chat.conversations } })
+      .populate("user")
+      .sort("-createdAt");
+    res.status(200).json({ success: true, count: conversations.length, data: conversations });
+  } else {
+    res.status(200).json(res.advancedResults);
+  }
 });
 
 //@description: Get Single Conversation
