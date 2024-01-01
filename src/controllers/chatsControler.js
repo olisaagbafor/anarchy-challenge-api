@@ -30,10 +30,16 @@ export const getChats = asyncHandler(async (req, res, next) => {
 //@route:   GET /api/v1/chats/:id
 //@access:  Private
 export const getChat = asyncHandler(async (req, res, next) => {
-  const chat = await ChatModel.findById(req.params.id);
+  const chat = await ChatModel.findById(req.params.id).populate("user");
 
   if (!chat) {
     return next(new ErrorResponse("Chat not found", 404));
+  }
+
+  if (!chat.is_shared) {
+    if (chat.user.toString() !== req.user._id) {
+      return next(new ErrorResponse("Chat not shared", 401));
+    }
   }
 
   res.status(200).send({ success: true, data: chat });

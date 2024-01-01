@@ -18,9 +18,13 @@ export const getConversations = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse("Chat not found", 404));
     }
 
-    const conversations = await ConversationModel.find({ _id: { $in: chat.conversations } })
-      .populate("user")
-      .sort("-createdAt");
+    if (!chat.is_shared) {
+      if (chat.user.toString() !== req.user._id) {
+        return next(new ErrorResponse("Chat not shared", 401));
+      }
+    }
+
+    const conversations = await ConversationModel.find({ _id: { $in: chat.conversations } }).populate("user");
     res.status(200).json({ success: true, count: conversations.length, data: conversations });
   } else {
     res.status(200).json(res.advancedResults);
